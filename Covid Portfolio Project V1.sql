@@ -1,4 +1,13 @@
---Percent of people who died after getting COVID
+/* Covid 19 Dataset from: https://ourworldindata.org/covid-deaths
+Dates from Janurary 2020 to April 2021
+
+Skills used: Join, CTE, Window Functions, Aggregate Function, Creating Views, Converting Data Types
+
+*/
+
+--Cases vs Deaths
+--Percent of people who died after getting Infected with COVID
+
 SELECT
 	continent,
 	location,
@@ -9,7 +18,10 @@ SELECT
 FROM CovidDeaths
 WHERE continent IS NOT NULL
 
+
+--Cases vs Population
 --Percent of population who got COVID
+
 SELECT
 	continent,
 	location,
@@ -20,7 +32,10 @@ SELECT
 FROM CovidDeaths
 WHERE continent IS NOT NULL
 
---Highest Death Count per Population
+
+--Death Count per Population
+--Ordered by Country with highest percentage
+
 SELECT
 	continent,
 	location,
@@ -32,7 +47,10 @@ WHERE continent IS NOT NULL
 GROUP BY Location, population, continent
 ORDER BY DeathPercentage DESC
 
---Highest Death Count per Continent
+
+--Death Count per Continent
+--Ordered by Continent with the most deaths
+
 SELECT
 	continent,
 	SUM(population) as continentPopulation,
@@ -51,7 +69,10 @@ WHERE continent IS NOT NULL
 GROUP BY continent
 ORDER BY continentDeaths DESC
 
+
 --Vaccinations vs Population
+--Percent of country population that is vaccinated by date
+
 WITH popVsVac AS (
 SELECT
 	CovidDeaths.continent,
@@ -71,4 +92,3 @@ SELECT
 	*,
 	CAST(rollingVaccinations AS float)/CAST(population AS float)*100 AS percentVaccinated
 FROM popVsVac
-WHERE location LIKE 'United States'
